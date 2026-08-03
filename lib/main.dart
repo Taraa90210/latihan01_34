@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const MyHomePage(
-        title: 'Aplikasi flutter kah?', //<---- yang ini pak
+        title: 'Check Stock', //<---- yang ini pak
       ),
     );
   }
@@ -58,16 +59,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String barang = 'Buku Kotak';
+  num hargaMember = 5000;
+  num hargaUmum = 5500;
+  int jumlahStock = 15;
+  bool tersedia = true;
+  late num total = hargaMember * 3;
+  late num selisih = hargaUmum - hargaMember;
+  // Mengapa pemilihan tipe data pada program ini penting bagi keakuratan kasir koperasi?
+  // Jawaban:
+  //         Mencegah kesalahan perhitungan uang, menjamin stok selalu akurat dan bisa divalidasi, 
+  //         mencegah barang terjual padahal stok kosong
 
-  void _incrementCounter() {
+  void _printStock() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      print('=====Stock=====');
+      print('Barang: $barang');
+      print('Harga Member: $hargaMember');
+      print('Harga Umum: $hargaUmum');
+      print('Jumlah Stock: $jumlahStock');
+      print('Tersedia: $tersedia');
+      print('Total (anggota) 3 pcs: $total');
+      print('Selisih Anggota dan Umum: $selisih');
+      print('===============');
     });
   }
 
@@ -109,18 +128,15 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: .center,
           children: [
-            const Text('berapa le:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            const Text('barang'),
+            Text('', style: Theme.of(context).textTheme.headlineMedium),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.ac_unit),
+        onPressed: _printStock, //<----
+        tooltip: 'Cek stock',
+        child: const Text('Cek'),
       ),
     );
   }
