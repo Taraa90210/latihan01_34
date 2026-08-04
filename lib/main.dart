@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,28 +8,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: .fromSeed(
           seedColor: const Color.fromARGB(255, 51, 206, 245),
         ),
@@ -42,51 +27,83 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String barang = 'Buku Kotak';
-  num hargaMember = 5000;
-  num hargaUmum = 5500;
-  int jumlahStock = 15;
-  bool tersedia = true;
-  late num total = hargaMember * 3;
-  late num selisih = hargaUmum - hargaMember;
-  // Mengapa pemilihan tipe data pada program ini penting bagi keakuratan kasir koperasi?
-  // Jawaban:
-  //         Mencegah kesalahan perhitungan uang, menjamin stok selalu akurat dan bisa divalidasi, 
-  //         mencegah barang terjual padahal stok kosong
 
   void _printStock() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      String barang = 'Pulpen 3 Warna';
+      num hargaMember = 25000;
+      num hargaUmum = 25000;
+      int jumlahStock = 30;
+      bool member = true;
+      num hargaSatuan;
+      num potongan;
+
+      bool tersedia = jumlahStock > 0; //<----
+      num selisih = hargaUmum - hargaMember;
+
+      final formatRupiah = NumberFormat.currency(
+        locale: 'id_ID',
+        symbol: 'Rp',
+        decimalDigits: 0,
+      );
+
+      if (member == true) {
+        hargaSatuan = hargaMember;
+      } 
+      else {
+        hargaSatuan = hargaUmum;
+      }
+      num beliBerapa = 22;
+      num total = hargaSatuan * beliBerapa;
+
+      if (total > 500000 && member == true) {
+        potongan = total * (15/100);
+      }
+      else if (total > 200000) {
+        potongan = total * (10/100);
+      }
+      else if (total >   100000) {
+        potongan = total * (5/100);
+      }
+      else {
+        potongan = 0;
+      }
+
+      num hargaAkhir = total - potongan;
+
+    //jarak la
+    String kategori = 'atk';
+    String lokasiRak;
+    switch (kategori) {
+      case 'atk' : lokasiRak = 'Rak 1';
+      case 'makanan' : lokasiRak = 'Rak 2';
+      case 'minuman' : lokasiRak = 'Rak 3';
+      default : lokasiRak = 'Rak Lain';
+    };
+    //Kalau pakai banyak if-else if harus menulis ekspresi pengecekan variabel kategori
+    //berulang-ulang di setiap baris kondisi
+    //
       print('=====Stock=====');
       print('Barang: $barang');
-      print('Harga Member: $hargaMember');
-      print('Harga Umum: $hargaUmum');
+      print('Rak: $lokasiRak');
+      print('Harga Member: ${formatRupiah.format(hargaMember)}');
+      print('Harga Umum: ${formatRupiah.format(hargaUmum)}');
       print('Jumlah Stock: $jumlahStock');
-      print('Tersedia: $tersedia');
-      print('Total (anggota) 3 pcs: $total');
-      print('Selisih Anggota dan Umum: $selisih');
+      print('Tersedia: ${tersedia ? "Tersedia" : "Tidak Tersedia"}'); //<----
+      print('Status Pembeli: ${member ? "Member" : "Umum"}');
+      print('Total Barang yang di Beli: $beliBerapa pcs');
+      print('Total: ${formatRupiah.format(total)}');
+      print('Potongan: ${potongan}');
+      print('Total (Potongan): ${formatRupiah.format(hargaAkhir)}');
+      print('Selisih Anggota dan Umum: ${formatRupiah.format(selisih)}');
       print('===============');
+      
     });
   }
 
