@@ -110,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       List<String> barangGudang = ['Krayon', 'Buku Tulis', 'Pensil', 'Rautan'];
       List<num> hargaBarang = [10000, 3000, 2500, 2000];
+      int stockBuku = 5;
 
       final formatRupiah = NumberFormat.currency(
         locale: 'id_ID',
@@ -117,11 +118,15 @@ class _MyHomePageState extends State<MyHomePage> {
         decimalDigits: 0,
       );
 
-      print('=====Daftar Barang=====');
-      for (int i = 0; i < barangGudang.length; i++ ) {
-        print('${i+1}. ${barangGudang[i]}-${formatRupiah.format(hargaBarang[i])}');
+      print('=====Penjualan Buku Tulis=====');
+      // for (int i = 0; i < barangGudang.length; i++ ) {
+      //   print('${i+1}. ${barangGudang[i]}-${formatRupiah.format(hargaBarang[i])}');
+      // }
+      while (stockBuku > 0) {
+        stockBuku = stockBuku - 1;
+        print('Terjual 1, Sisa stock: $stockBuku');
       }
-      print('=======================');
+      print('==============================');
     });
   }
 
