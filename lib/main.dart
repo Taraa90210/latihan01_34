@@ -123,9 +123,25 @@ class _MyHomePageState extends State<MyHomePage> {
       //   print('${i+1}. ${barangGudang[i]}-${formatRupiah.format(hargaBarang[i])}');
       // }
       while (stockBuku > 0) {
-        stockBuku = stockBuku - 1;
+        stockBuku = stockBuku - 2;
         print('Terjual 1, Sisa stock: $stockBuku');
       }
+      //Bahaya apa yang muncul bila kondisi berhenti pada while keliru, dan bagaimana 
+      //cara untuk memastikan koperasi tidak menjual melebihi stok?
+      //Jawaban:
+      //Jika kondisi while ditulis keliru, misalnya menggunakan 'stock != 0' alih-alih 'stock > 0',
+      //maka jika suatu saat nilai stok "terlewat" dari angka kecil langsung ke minus (misalnya karena
+      //kesalahan lain dalam program), kondisi 'stock != 0' akan tetap bernilai true (karena -1 != 0),
+      //sehingga perulangan tetap berjalan dan program bisa mencetak "sisa stok: -1" atau lebih kecil lagi.
+      //Ini berbahaya karena data yang ditampilkan menjadi tidak masuk akal secara bisnis - petugas koperasi
+      //bisa mengira barang masih "terjual" padahal stok fisiknya sudah habis, sehingga catatan penjualan
+      //jadi tidak akurat.
+      //
+      //Untuk memastikan koperasi tidak menjual melebihi stok, kondisi while sebaiknya menggunakan
+      //'stock > 0' (bukan '!= 0'). Dengan kondisi ini, begitu stok mencapai 0, perulangan otomatis
+      //berhenti karena '0 > 0' bernilai false. Untuk kasus penjualan satu per satu seperti pada soal ini
+      //(stok berkurang tepat 1 setiap kali), kondisi 'stock > 0' sudah cukup aman dan menjamin stok
+      //tidak akan pernah tercatat bernilai negatif.
       print('==============================');
     });
   }
