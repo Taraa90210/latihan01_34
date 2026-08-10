@@ -143,3 +143,49 @@
 // double hitungTotal(int barangYangDiBeli, double hargaSatuan) {
 //   return barangYangDiBeli * hargaSatuan;
 // }
+
+//
+
+//RPL-12.2-503 — List
+// void main() {
+//   runApp(const MyApp());
+//   Barang krayon = Barang('Krayon', 10000, 10);
+//   Barang bukuTulis = Barang('Buku tulis', 3000, 8);
+//   Barang pensil = Barang('Pensil', 2500, 15);
+//   Barang rautan = Barang('Rautan', 2000, 13);
+//   List<Barang> daftarBarang = [krayon, bukuTulis, pensil, rautan];
+  
+//   for (int i = 0; i < daftarBarang.length; i++) {
+//     daftarBarang[i].tampilkan();
+//   }
+// }
+
+// //apa yang lebih baik dibanding cara Sprint 3?
+// //Jawaban:
+// //Kode menjadi lebih ringkas karena cukup panggil daftarBarang[i].tampilkan(),
+// //tidak perlu menulis ulang format print manual setiap kali,
+// //juga lebih aman karena nama, harga, dan stok tergabung jadi 1 objek utuh,
+// //datanya tidak mungkin "kepisah" seperti risiko pada 3 List terpisah
+// //(barangGudang, hargaBarang, stockBarang) yang bisa tidak sinkron
+// //kalau salah satu List berubah jumlah elemennya.
+
+
+// class Barang  {
+//   String namaBarang;
+//   num hargaBarang;
+//   int stokBarang;
+
+//   Barang(this.namaBarang, this.hargaBarang, this.stokBarang);
+
+//   bool cekStock() {
+//     return stokBarang > 0;
+//   }
+
+//   void tampilkan(){
+//     print('========================');
+//     print('Barang : $namaBarang');
+//     print('Harga  : $hargaBarang');
+//     print('Stock  : $stokBarang');
+//     print('=========================');
+//   }
+// }

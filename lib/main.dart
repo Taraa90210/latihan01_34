@@ -23,6 +23,15 @@ void main() {
 //(barangGudang, hargaBarang, stockBarang) yang bisa tidak sinkron
 //kalau salah satu List berubah jumlah elemennya.
 
+//Apa keuntungan memodelkan barang sebagai objek bagi pengembangan sistem koperasi ke depan?
+//Jawaban:
+//kalau koperasi berkembang dari 4 barang jadi 400 barang,
+//cukup tambah objek baru ke List Bandingkan dengan cara Sprint 3 
+//kalau harus tetap sinkron 3 List sekaligus untuk 400 data.
+//Lalu method seperti tampilkan() atau cekStock() itu sudah ditulis sekali, 
+//tapi bisa dipakai berkali-kali untuk barang apa pun, 
+//jika nanti ada bagian program lain (misal fitur laporan, atau fitur pencarian barang) 
+//yang butuh cek stok atau tampilkan kartu barang, tinggal memakai ulang method yang sama, tanpa menulis ulang logikanya
 
 class Barang  {
   String namaBarang;
