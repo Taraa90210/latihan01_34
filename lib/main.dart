@@ -12,26 +12,9 @@ void main() {
   for (int i = 0; i < daftarBarang.length; i++) {
     daftarBarang[i].tampilkan();
   }
+  print('Nilai stock rautan: ${rautan.nilaiStock()}');
 }
 
-//apa yang lebih baik dibanding cara Sprint 3?
-//Jawaban:
-//Kode menjadi lebih ringkas karena cukup panggil daftarBarang[i].tampilkan(),
-//tidak perlu menulis ulang format print manual setiap kali,
-//juga lebih aman karena nama, harga, dan stok tergabung jadi 1 objek utuh,
-//datanya tidak mungkin "kepisah" seperti risiko pada 3 List terpisah
-//(barangGudang, hargaBarang, stockBarang) yang bisa tidak sinkron
-//kalau salah satu List berubah jumlah elemennya.
-
-//Apa keuntungan memodelkan barang sebagai objek bagi pengembangan sistem koperasi ke depan?
-//Jawaban:
-//kalau koperasi berkembang dari 4 barang jadi 400 barang,
-//cukup tambah objek baru ke List Bandingkan dengan cara Sprint 3 
-//kalau harus tetap sinkron 3 List sekaligus untuk 400 data.
-//Lalu method seperti tampilkan() atau cekStock() itu sudah ditulis sekali, 
-//tapi bisa dipakai berkali-kali untuk barang apa pun, 
-//jika nanti ada bagian program lain (misal fitur laporan, atau fitur pencarian barang) 
-//yang butuh cek stok atau tampilkan kartu barang, tinggal memakai ulang method yang sama, tanpa menulis ulang logikanya
 
 class Barang  {
   String namaBarang;
@@ -50,6 +33,10 @@ class Barang  {
     print('Harga  : $hargaBarang');
     print('Stock  : $stokBarang');
     print('=========================');
+  }
+
+  double nilaiStock() {
+    return hargaBarang.toDouble() * stokBarang;
   }
 }
 
