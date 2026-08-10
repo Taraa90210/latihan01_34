@@ -129,3 +129,17 @@
   //     print('======================');
   //   });
   // }
+
+//   void main() {
+//   runApp(const MyApp());
+//   hitungTotal(barangYangDiBeli, hargaSatuan);
+//   print('${hitungTotal(barangYangDiBeli, hargaSatuan)}');
+// }
+
+// List<num> hargaBarang = [10000, 3000, 2500, 2000];
+// int barangYangDiBeli = 3;
+// double hargaSatuan = hargaBarang[1].toDouble();
+
+// double hitungTotal(int barangYangDiBeli, double hargaSatuan) {
+//   return barangYangDiBeli * hargaSatuan;
+// }

@@ -3,16 +3,34 @@ import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
-  hitungTotal(barangYangDiBeli, hargaSatuan);
-  print('${hitungTotal(barangYangDiBeli, hargaSatuan)}');
+  Barang krayon = Barang('Krayon', 10000, 10);
+  Barang bukuTulis = Barang('Buku tulis', 3000, 8);
+  Barang pensil = Barang('Pensil', 2500, 15);
+  Barang rautan = Barang('Rautan', 2000, 13);
+  krayon.tampilkan();
+  bukuTulis.tampilkan();
+  pensil.tampilkan();
+  rautan.tampilkan();
 }
 
-List<num> hargaBarang = [10000, 3000, 2500, 2000];
-int barangYangDiBeli = 3;
-double hargaSatuan = hargaBarang[1].toDouble();
+class Barang  {
+  String namaBarang;
+  num hargaBarang;
+  int stokBarang;
 
-double hitungTotal(int barangYangDiBeli, double hargaSatuan) {
-  return barangYangDiBeli * hargaSatuan;
+  Barang(this.namaBarang, this.hargaBarang, this.stokBarang);
+
+  bool cekStock() {
+    return stokBarang > 0;
+  }
+
+  void tampilkan(){
+    print('========================');
+    print('Barang : $namaBarang');
+    print('Harga  : $hargaBarang');
+    print('Stock  : $stokBarang');
+    print('=========================');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -46,22 +64,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   void _printStock() {
-    setState(() {
-      List<String> barangGudang = ['Krayon', 'Buku Tulis', 'Pensil', 'Rautan'];
-      List<num> hargaBarang = [10000, 3000, 2500, 2000];
-      List<int> stockBarang = [8, 2, 3, 5];
-      int barangYangDiBeli = 3;
-      double hargaSatuan = hargaBarang[1].toDouble();
-      double hitungTotal;
-      final formatRupiah = NumberFormat.currency(
-        locale: 'id_ID',
-        symbol: 'Rp',
-        decimalDigits: 0,
-      );
-
-      print('=====Check Stock=====');
-      print('======================');
-    });
   }
 
   @override
