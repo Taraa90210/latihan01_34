@@ -210,3 +210,12 @@
 //tapi bisa dipakai berkali-kali untuk barang apa pun, 
 //jika nanti ada bagian program lain (misal fitur laporan, atau fitur pencarian barang) 
 //yang butuh cek stok atau tampilkan kartu barang, tinggal memakai ulang method yang sama, tanpa menulis ulang logikanya
+
+//
+
+//HOTS 1 spirnt 5
+  // double nilaiStock() {
+  //   return hargaBarang.toDouble() * stokBarang;
+  // }
+  // print('Nilai stock rautan: ${rautan.nilaiStock()}');
+

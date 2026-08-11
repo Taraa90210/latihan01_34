@@ -12,7 +12,7 @@ void main() {
   for (int i = 0; i < daftarBarang.length; i++) {
     daftarBarang[i].tampilkan();
   }
-  print('Nilai stock rautan: ${rautan.nilaiStock()}');
+  print('Bisa dijual: ${rautan.bisaDijual(16)} ');
 }
 
 
@@ -35,9 +35,16 @@ class Barang  {
     print('=========================');
   }
 
-  double nilaiStock() {
-    return hargaBarang.toDouble() * stokBarang;
+  bool bisaDijual(int diminta) {
+    return stokBarang >= diminta;
   }
+}
+
+class Pembeli {
+  String nama;
+  bool statusAnggota;
+
+  Pembeli(this.nama, this.statusAnggota);
 }
 
 class MyApp extends StatelessWidget {
