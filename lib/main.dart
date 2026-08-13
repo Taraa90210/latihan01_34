@@ -1,44 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(const MyApp());
-  Barang krayon = Barang('Krayon', 10000, 10);
-  Barang bukuTulis = Barang('Buku tulis', 3000, 8);
-  Barang pensil = Barang('Pensil', 2500, 15);
-  Barang rautan = Barang('Rautan', 2000, 13);
-  List<Barang> daftarBarang = [krayon, bukuTulis, pensil, rautan];
-  
-  for (int i = 0; i < daftarBarang.length; i++) {
-    daftarBarang[i].tampilkan();
-  }
-  print('Bisa dijual: ${rautan.bisaDijual(16)} ');
-}
+  void main() {
+    runApp(const MyApp());
+    Barang krayon = Barang('Krayon', 10000, 10);
+    Barang bukuTulis = Barang('Buku tulis', 3000, 8);
+    Barang pensil = Barang('Pensil', 2500, 15);
+    Barang rautan = Barang('Rautan', 2000, 13);
+    List<Barang> daftarBarang = [krayon, bukuTulis, pensil, rautan];
+    BarangPromo diskon = BarangPromo('Roti', 2500, 12, 10);
 
 
-class Barang  {
-  String namaBarang;
-  num hargaBarang;
-  int stokBarang;
+    // for (int i = 0; i < daftarBarang.length; i++) {
+    //   daftarBarang[i].tampilkan();
+    // }
+    // print('Bisa dijual: ${rautan.bisaDijual(16)} ');
 
-  Barang(this.namaBarang, this.hargaBarang, this.stokBarang);
-
-  bool cekStock() {
-    return stokBarang > 0;
+    print('Harga diskon roti: ${diskon.hargaSetelahDiskon()}');  
+    prosesBeli("5", bukuTulis);
+    prosesBeli("tujuh", rautan);
+    print('Stock rautan sekarang: ${rautan.stokBarang}');
+    print('Stock buku sekarang: ${bukuTulis.stokBarang}');
   }
 
-  void tampilkan(){
-    print('========================');
-    print('Barang : $namaBarang');
-    print('Harga  : $hargaBarang');
-    print('Stock  : $stokBarang');
-    print('=========================');
+
+  class Barang  {
+    String namaBarang;
+    num hargaBarang;
+    int _stokBarang;
+
+    int get stokBarang => _stokBarang;
+
+    Barang(this.namaBarang, this.hargaBarang, this._stokBarang);
+
+    bool cekStock() {
+      return stokBarang > 0;
+    }
+
+    void tampilkan(){
+      print('========================');
+      print('Barang : $namaBarang');
+      print('Harga  : $hargaBarang');
+      print('Stock  : $stokBarang');
+      print('=========================');
+    }
+
+    bool bisaDijual(int diminta) {
+      return stokBarang >= diminta;
+    }
+
+      void jual(int n) {
+        if (bisaDijual(n)) {
+          _stokBarang = _stokBarang - n;
+        }
+        else {
+          print('Stock Kurang');
+        }
+      }
   }
 
-  bool bisaDijual(int diminta) {
-    return stokBarang >= diminta;
+void prosesBeli (String inputJumlah, Barang barang) {
+  try{
+        int jumlah = int.parse(inputJumlah);
+        barang.jual(jumlah);
+      } catch (e) {
+        print('Kesalahan dalam memasukkan angka'); //Bagaimana penanganan galat meningkatkan 
+                                                   //kepercayaaan pengurus pada sistem?
+      } finally {
+         print('Transaksi dicatat di log');
+      }
+      }
+
+  class BarangPromo extends Barang {
+    double diskonBarang;
+
+    BarangPromo(super.namaBarang, super.hargaBarang, super.stokBarang, this.diskonBarang);
+
+    double hargaSetelahDiskon() {
+      double harga = hargaBarang.toDouble();
+      return harga - (harga * (diskonBarang/100));
+    }
   }
-}
 
 class Pembeli {
   String nama;
