@@ -1,6 +1,16 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// Barang dan Pembeli dimodelkan sebagai class & object agar data(stok, poin) dan 
+/// perilakunya (jual, tambahPoin) menyatu dalamsatu kesatuan. 
+/// Data sensitif itu dienkapsulasi (private + getter) supaya hanya bisa diubah lewat method resmi, bukan diakses bebas.
+/// Di dalam method-method itu, percabangan if-else menentukan aturan bisnis koperasi: harga anggota vs umum,
+/// besar potongan, dan syarat hanya anggota dapat poin. Hasil keputusan itu dikembalikan lewat return value, 
+/// sehingga bisa mengalir dan dipakai ulang di prosesBeli() (mis. hargaSatuan, poinDiDapat). Seluruh alur transaksi
+/// dibungkus try-catch-finally agar input salah atau stok kurang tidak menghentikan program, 
+/// dan setiap transaksi tetap tercatat di log.
   void main() async {
     runApp(const MyApp());
     //daftar barang
@@ -12,17 +22,22 @@ import 'package:intl/intl.dart';
     //belum digunakan lagi ↓↓
     BarangPromo diskon = BarangPromo('Roti', 2500, 12, 10);
     //pembeli
-    Pembeli budi = Pembeli('Budi', true);   
-    Pembeli sari = Pembeli('Sari', false);  
+    Pembeli budi = Pembeli('Budi', true, 10);   
+    Pembeli sari = Pembeli('Sari', false, 0);  
     
     //print daftar barang
-    await muatLaporan();
+    try {
+      await muatLaporan();
+    } catch (e) {
+      print('$e \nLaporan gagal dimuat, namun sistem tetap berjalan');
+    }
+    
     for (int i = 0; i < daftarBarang.length; i++) {
       daftarBarang[i].tampilkan();  
     }
     //prin struk
     prosesBeli("3", krayon, budi);
-    prosesBeli("lima", bukuTulis, sari);
+    prosesBeli("4", bukuTulis, sari);
   }
 
 //format Rp
@@ -82,6 +97,11 @@ final formatRupiah = NumberFormat.currency(
 Future<void> muatLaporan() async {
   print('Menyiapkan laporan penjualan...');
   await Future.delayed(Duration(seconds: 1));
+  bool laporanGagal = false; 
+
+  if (laporanGagal) {
+    throw Exception('Gagal memuat laporan, koneksi ke server terputus');
+  }
   print('Laporan siap!');
 }
 
@@ -107,10 +127,14 @@ void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
           potongan = 0;
         }
         num totalAkhir = totalHarga - potongan;
+
         //prin struck na
         print('--------------------- Struck Pembelian ---------------------');
         print('Pembeli: ${pembeli.nama}');        
         print('Status anggota: ${pembeli.statusAnggota}');
+        if (pembeli.statusAnggota == true) {
+          print('Poin Anggota: ${pembeli.poinAnggota} poin');
+        }
         print('Harga ${barang.namaBarang}: ${formatRupiah.format(hargaSatuan)}');
         print('Jumlah ${barang.namaBarang} yang dibeli : $jumlah');        
         print('Total belanja (Sebelum Potongan) ${pembeli.nama}: ${formatRupiah.format(totalHarga)}');
@@ -119,6 +143,11 @@ void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
         print('Stok ${barang.namaBarang} sebelum dijual: ${barang.stokBarang}');
         barang.jual(jumlah);
         print('Stok ${barang.namaBarang} setelah dijual: ${barang.stokBarang}');
+        if (pembeli.statusAnggota == true) {
+          int poinDiDapat = pembeli.tambahPoin();
+          print('Mendapat $poinDiDapat poin anggota');
+          print('Poin Anggota sekarang: ${pembeli.poinAnggota} Poin');
+        }
         print('-------------------------------------------------------------');
       } on FormatException catch (e) { //pencegahan eror
         print('$inputJumlah bukanlah angka, ulangi'); 
@@ -144,8 +173,22 @@ void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
 class Pembeli {
   String nama;
   bool statusAnggota;
+  int _poinAnggota;
 
-  Pembeli(this.nama, this.statusAnggota);
+  Pembeli(this.nama, this.statusAnggota, this._poinAnggota);
+  
+  int get poinAnggota => _poinAnggota;
+
+  int tambahPoin() {
+    if (statusAnggota == true) {
+      int penambahanPoin = 5;
+      _poinAnggota = _poinAnggota + penambahanPoin;
+      return penambahanPoin;
+    } else {
+      _poinAnggota = _poinAnggota + 0;
+      return 0;
+    }
+    }
 }
 
 class MyApp extends StatelessWidget {
