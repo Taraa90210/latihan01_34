@@ -3,43 +3,51 @@ import 'package:intl/intl.dart';
 
   void main() async {
     runApp(const MyApp());
+    //daftar barang
     Barang krayon = Barang('Krayon', 10000, 10);
     Barang bukuTulis = Barang('Buku tulis', 3000, 8);
     Barang pensil = Barang('Pensil', 2500, 15);
     Barang rautan = Barang('Rautan', 2000, 13);
     List<Barang> daftarBarang = [krayon, bukuTulis, pensil, rautan];
+    //belum digunakan lagi ↓↓
     BarangPromo diskon = BarangPromo('Roti', 2500, 12, 10);
+    //pembeli
     Pembeli budi = Pembeli('Budi', true);   
     Pembeli sari = Pembeli('Sari', false);  
-
+    
+    //print daftar barang
     await muatLaporan();
     for (int i = 0; i < daftarBarang.length; i++) {
       daftarBarang[i].tampilkan();  
     }
-
+    //prin struk
     prosesBeli("3", krayon, budi);
     prosesBeli("lima", bukuTulis, sari);
   }
 
+//format Rp
 final formatRupiah = NumberFormat.currency(
   locale: 'id_ID',
   symbol: 'Rp',
   decimalDigits: 0,
 );
-
+//kelas barang
   class Barang  {
+    //deklarasi
     String namaBarang;
     num hargaBarang;
     int _stokBarang;
-
+    
+    //getter karena dikapsulasi
     int get stokBarang => _stokBarang;
 
     Barang(this.namaBarang, this.hargaBarang, this._stokBarang);
 
+    //true jika lebih dari nol
     bool cekStock() {
       return stokBarang > 0;
     }
-
+    //memnentukan harga sesuai status na
     num hargaYangDitentukan(Pembeli pembeli) {
       if (pembeli.statusAnggota == true) {
         return hargaBarang - (hargaBarang * (5/100));
@@ -48,7 +56,7 @@ final formatRupiah = NumberFormat.currency(
         return hargaBarang;
       }
     }
-
+    //print stok dan harga
     void tampilkan(){
       print('========================');
       print('Barang : $namaBarang');
@@ -56,11 +64,11 @@ final formatRupiah = NumberFormat.currency(
       print('Stock  : $stokBarang');
       print('=========================');
     }
-
+    //ture jika stock lebih dari barang yang ingin dibeli
     bool bisaDijual(int diminta) {
       return stokBarang >= diminta;
     }
-
+    //menentukan stock setelah terjual, print stock kurang jika tidak mencukupi
     void jual(int n) {
       if (bisaDijual(n)) {
         _stokBarang = _stokBarang - n;
@@ -79,11 +87,13 @@ Future<void> muatLaporan() async {
 
 void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
   try{
+        //deklarasi var
         int jumlah = int.parse(inputJumlah);
         num hargaSatuan = barang.hargaYangDitentukan(pembeli);
         num totalHarga = hargaSatuan * jumlah;
         num potongan;
 
+        //pengecekan potongan harga, dari 50ribuh sampai 10ribuh
         if (totalHarga > 50000 && pembeli.statusAnggota == true) {
           potongan = totalHarga * (15/100);
         }
@@ -97,6 +107,7 @@ void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
           potongan = 0;
         }
         num totalAkhir = totalHarga - potongan;
+        //prin struck na
         print('--------------------- Struck Pembelian ---------------------');
         print('Pembeli: ${pembeli.nama}');        
         print('Status anggota: ${pembeli.statusAnggota}');
@@ -109,7 +120,7 @@ void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
         barang.jual(jumlah);
         print('Stok ${barang.namaBarang} setelah dijual: ${barang.stokBarang}');
         print('-------------------------------------------------------------');
-      } on FormatException catch (e) {
+      } on FormatException catch (e) { //pencegahan eror
         print('$inputJumlah bukanlah angka, ulangi'); 
         //Bagaimana penanganan galat meningkatkan kepercayaaan pengurus pada sistem?
       } on Exception catch (e) {
