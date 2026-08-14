@@ -219,3 +219,17 @@
   // }
   // print('Nilai stock rautan: ${rautan.nilaiStock()}');
 
+//
+
+
+    // for (int i = 0; i < daftarBarang.length; i++) {
+    //   daftarBarang[i].tampilkan();
+    // }
+    // print('Bisa dijual: ${rautan.bisaDijual(16)} ');
+
+    // // print('Harga diskon roti: ${diskon.hargaSetelahDiskon()}');  
+    // prosesBeli("5", bukuTulis);
+    // prosesBeli("tujuh", rautan);
+    // prosesBeli("100", krayon);
+    // print('Stock rautan sekarang: ${rautan.stokBarang}');
+    // print('Stock buku sekarang: ${bukuTulis.stokBarang}');

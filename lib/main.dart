@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-  void main() {
+  void main() async {
     runApp(const MyApp());
     Barang krayon = Barang('Krayon', 10000, 10);
     Barang bukuTulis = Barang('Buku tulis', 3000, 8);
@@ -9,21 +9,23 @@ import 'package:intl/intl.dart';
     Barang rautan = Barang('Rautan', 2000, 13);
     List<Barang> daftarBarang = [krayon, bukuTulis, pensil, rautan];
     BarangPromo diskon = BarangPromo('Roti', 2500, 12, 10);
+    Pembeli budi = Pembeli('Budi', true);   
+    Pembeli sari = Pembeli('Sari', false);  
 
+    await muatLaporan();
+    for (int i = 0; i < daftarBarang.length; i++) {
+      daftarBarang[i].tampilkan();  
+    }
 
-    // for (int i = 0; i < daftarBarang.length; i++) {
-    //   daftarBarang[i].tampilkan();
-    // }
-    // print('Bisa dijual: ${rautan.bisaDijual(16)} ');
-
-    // print('Harga diskon roti: ${diskon.hargaSetelahDiskon()}');  
-    prosesBeli("5", bukuTulis);
-    prosesBeli("tujuh", rautan);
-    prosesBeli("100", krayon);
-    // print('Stock rautan sekarang: ${rautan.stokBarang}');
-    // print('Stock buku sekarang: ${bukuTulis.stokBarang}');
+    prosesBeli("3", krayon, budi);
+    prosesBeli("lima", bukuTulis, sari);
   }
 
+final formatRupiah = NumberFormat.currency(
+  locale: 'id_ID',
+  symbol: 'Rp',
+  decimalDigits: 0,
+);
 
   class Barang  {
     String namaBarang;
@@ -38,10 +40,19 @@ import 'package:intl/intl.dart';
       return stokBarang > 0;
     }
 
+    num hargaYangDitentukan(Pembeli pembeli) {
+      if (pembeli.statusAnggota == true) {
+        return hargaBarang - (hargaBarang * (5/100));
+      } 
+      else {
+        return hargaBarang;
+      }
+    }
+
     void tampilkan(){
       print('========================');
       print('Barang : $namaBarang');
-      print('Harga  : $hargaBarang');
+      print('Harga  : ${formatRupiah.format(hargaBarang)}');
       print('Stock  : $stokBarang');
       print('=========================');
     }
@@ -50,27 +61,61 @@ import 'package:intl/intl.dart';
       return stokBarang >= diminta;
     }
 
-      void jual(int n) {
-        if (bisaDijual(n)) {
-          _stokBarang = _stokBarang - n;
-        }
-        else {
-          throw Exception('Stock Kurang');
-        }
+    void jual(int n) {
+      if (bisaDijual(n)) {
+        _stokBarang = _stokBarang - n;
       }
+      else {
+        throw Exception('Stock Kurang');
+      }
+    }
   }
 
-void prosesBeli (String inputJumlah, Barang barang) {
+Future<void> muatLaporan() async {
+  print('Menyiapkan laporan penjualan...');
+  await Future.delayed(Duration(seconds: 1));
+  print('Laporan siap!');
+}
+
+void prosesBeli (String inputJumlah, Barang barang, Pembeli pembeli) {
   try{
         int jumlah = int.parse(inputJumlah);
+        num hargaSatuan = barang.hargaYangDitentukan(pembeli);
+        num totalHarga = hargaSatuan * jumlah;
+        num potongan;
+
+        if (totalHarga > 50000 && pembeli.statusAnggota == true) {
+          potongan = totalHarga * (15/100);
+        }
+        else if (totalHarga > 20000) {
+          potongan = totalHarga * (10/100);
+        }
+        else if (totalHarga >   10000) {
+          potongan = totalHarga * (5/100);
+        }
+        else {
+          potongan = 0;
+        }
+        num totalAkhir = totalHarga - potongan;
+        print('--------------------- Struck Pembelian ---------------------');
+        print('Pembeli: ${pembeli.nama}');        
+        print('Status anggota: ${pembeli.statusAnggota}');
+        print('Harga ${barang.namaBarang}: ${formatRupiah.format(hargaSatuan)}');
+        print('Jumlah ${barang.namaBarang} yang dibeli : $jumlah');        
+        print('Total belanja (Sebelum Potongan) ${pembeli.nama}: ${formatRupiah.format(totalHarga)}');
+        print('Potongan: ${formatRupiah.format(potongan)}');
+        print('Total akhir: ${formatRupiah.format(totalAkhir)}');
+        print('Stok ${barang.namaBarang} sebelum dijual: ${barang.stokBarang}');
         barang.jual(jumlah);
+        print('Stok ${barang.namaBarang} setelah dijual: ${barang.stokBarang}');
+        print('-------------------------------------------------------------');
       } on FormatException catch (e) {
-        print('$inputJumlah bukanlah angka, ulangi'); //Bagaimana penanganan galat meningkatkan 
-                                                      //kepercayaaan pengurus pada sistem?
+        print('$inputJumlah bukanlah angka, ulangi'); 
+        //Bagaimana penanganan galat meningkatkan kepercayaaan pengurus pada sistem?
       } on Exception catch (e) {
         print('Stock kurang');
       } finally {
-        print('Transaksi dicatat di log');
+        print('Transaksi dicatat di log\n');
       }
     }
 
