@@ -16,11 +16,12 @@ import 'package:intl/intl.dart';
     // }
     // print('Bisa dijual: ${rautan.bisaDijual(16)} ');
 
-    print('Harga diskon roti: ${diskon.hargaSetelahDiskon()}');  
+    // print('Harga diskon roti: ${diskon.hargaSetelahDiskon()}');  
     prosesBeli("5", bukuTulis);
     prosesBeli("tujuh", rautan);
-    print('Stock rautan sekarang: ${rautan.stokBarang}');
-    print('Stock buku sekarang: ${bukuTulis.stokBarang}');
+    prosesBeli("100", krayon);
+    // print('Stock rautan sekarang: ${rautan.stokBarang}');
+    // print('Stock buku sekarang: ${bukuTulis.stokBarang}');
   }
 
 
@@ -54,7 +55,7 @@ import 'package:intl/intl.dart';
           _stokBarang = _stokBarang - n;
         }
         else {
-          print('Stock Kurang');
+          throw Exception('Stock Kurang');
         }
       }
   }
@@ -63,13 +64,15 @@ void prosesBeli (String inputJumlah, Barang barang) {
   try{
         int jumlah = int.parse(inputJumlah);
         barang.jual(jumlah);
-      } catch (e) {
-        print('Kesalahan dalam memasukkan angka'); //Bagaimana penanganan galat meningkatkan 
-                                                   //kepercayaaan pengurus pada sistem?
+      } on FormatException catch (e) {
+        print('$inputJumlah bukanlah angka, ulangi'); //Bagaimana penanganan galat meningkatkan 
+                                                      //kepercayaaan pengurus pada sistem?
+      } on Exception catch (e) {
+        print('Stock kurang');
       } finally {
-         print('Transaksi dicatat di log');
+        print('Transaksi dicatat di log');
       }
-      }
+    }
 
   class BarangPromo extends Barang {
     double diskonBarang;
